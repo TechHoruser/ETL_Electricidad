@@ -54,7 +54,7 @@ def getData( html ):
 	enlaces = []
 	for item in selector:
 		energias_renovables = [
-			'Hidr\u00e1ulica',
+			'Hidráulica',
 			'Hidroeólica',
 			'Eólica',
 			'Solar fotovoltaica',
@@ -63,34 +63,23 @@ def getData( html ):
 		]
 		excluir = [
 			'Generación',
+			'Consumo en bombeo',
+			'Enlace Península-Baleares (7)',
+			'Saldo intercambios internacionales (8)',
 			'Demanda transporte(b.c.)',
 			'Demanda corregida (9)',
+			'Pérdidas en transporte',
 			'Demanda distribución',
 			'Total (10)'
 		]
-		# energias_renovables = [
-		# 	'Hidráulica'.encode( 'utf-8' ),
-		# 	'Hidroeólica'.encode( 'utf-8' ),
-		# 	'Eólica'.encode( 'utf-8' ),
-		# 	'Solar fotovoltaica'.encode( 'utf-8' ),
-		# 	'Solar térmica'.encode( 'utf-8' ),
-		# 	'Otras renovables (5)'.encode( 'utf-8' )
-		# ]
-		# excluir = [
-		# 	'Generación'.encode( 'utf-8' ),
-		# 	'Demanda transporte(b.c.)'.encode( 'utf-8' ),
-		# 	'Demanda corregida (9)'.encode( 'utf-8' ),
-		# 	'Demanda distribución'.encode( 'utf-8' ),
-		# 	'Total (10)'.encode( 'utf-8' )
-		# ]
-		if item.next_element.text not in excluir:
+		if item.next_element.text.encode( 'utf-8' ) not in excluir:
 			tipo    = item.next_element.text
 			consumo = item.next_element.next_sibling.text
 
 			enlaces.append({
 				'Tipo'      : tipo,
 				'Consumo'   : consumo,
-				'Renovable' : 'true' if tipo in energias_renovables else 'false'
+				'Renovable' : 'true' if tipo.encode( 'utf-8' ) in energias_renovables else 'false'
 				})
 
 	return json.dumps(enlaces)
