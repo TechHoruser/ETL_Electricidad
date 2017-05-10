@@ -26,15 +26,21 @@ date = datetime.strptime( start_date, format )
 end_date = datetime.strptime( end_date, format )
 
 consum = Consumo()
+prec   = Precio()
 
-row = {}
+json_consumo = []
+json_precio  = []
 while (date <= end_date):
 	print( 'Generando datos, día: ' + date.strftime("%d/%m/%Y") )
-	# Carga del html en el objeto consum
-	consum.setHtmlContent( date.strftime("%Y/%m/%d") )
 
-	row[ date.strftime("%Y/%m/%d") ] = consum.getData()
+	json_consumo += consum.getData( date.strftime("%Y/%m/%d") )
+
+	json_precio.append( prec.getData( date.strftime("%Y-%m-%d"), date.strftime("%d/%m/%Y") ) )
+
 	date = date + timedelta(days=1)
 
-gdd = Guardado( Params.tmp_directory, file_name + 'consumo.json', json.dumps( row ) )
+gdd = Guardado( Params.tmp_directory, file_name + '.consumo.json', json.dumps( json_consumo ) )
+gdd.saveFile()
+
+gdd = Guardado( Params.tmp_directory, file_name + '.precio.json', json.dumps( json_precio ) )
 gdd.saveFile()

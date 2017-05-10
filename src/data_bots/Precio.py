@@ -12,10 +12,10 @@ import json
 
 class Precio(object):
 	"""docstring for Precio"""
-	def __init__(self, arg):
+	def __init__(self):
 		super(Precio, self).__init__()
 		
-	def getData( self, anio, mes, dia ):
+	def getData( self, date_url, date_json ):
 		headers = {
 		            'Host'                      : 'www.endesaclientes.com',
 		            'User-Agent'                : 'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0',
@@ -24,24 +24,22 @@ class Precio(object):
 		            'Accept-Encoding'           : 'gzip, deflate, br',
 		            'Connection'                : 'keep-alive',
 					'Content-Type'              : 'application/x-www-form-urlencoded; charset=UTF-8',
+					'Content-Length'            : '145',
 					'X-Requested-With'          : 'XMLHttpRequest',
 					'Referer'                   : 'https://www.endesaclientes.com/precio-luz-pvpc.html',
-					'Content-Length'            : '145',
-					'Cookie'                    : 'path=/; _ga=GA1.2.1969013905.1490631616; variant-ab=A; idvis=2399743913468; smvr=eyJ2aXNpdHMiOjIsInZpZXdzIjo1LCJ0cyI6MTQ5MTI0MTA1MjE4MSwibnVtYmVyT2ZSZWplY3Rpb25CdXR0b25DbGljayI6MH0=; smuuid=15b10916e07-3f51b4928f58-cfc2cdf7-d402d3a2-edd37c1c-84b159099b6a; s_fid=6C7B4CD94E372B0D-11962E1D613DF644; s_nr=1491241089447-Repeat; _webo=jQeQdqI6CSWN45; privPol=1; JSESSIONID=RZQ05LALMtCmggziOHuDiCp_i5Bp_G0dQavcix-cbDIBxBEWVppt!-1349006667; path=/; browser=true; SS_X_JSESSIONID=sr805LnvZUBoyrpS7G88HpSHGn41v80s6SpoBTu-OW4ZuQYmcf_B!1999005620; AlteonP=Ag21C9EDXgrgWFdqKgtJGw$$; _gat=1; s_cc=true; s_ppn=hogares%3Aconoce%20la%20energ%C3%ADa%3Atarifa%20regulada%20pvpc%3Afacturaci%C3%B3n%20por%20horas%3Aprecio%20de%20la%20electricidad%20a%20tiempo%20real%20para%20tarifas%20pvpc; s_sq=%5B%5BB%5D%5D',
-					'Connection'                : 'keep-alive',
+					'Cookie'                    : 'path=/; path=/; idvis=2399765328746; browser=true; variant-ab=A; JSESSIONID=yuTzTaY_l5tSojFPvG5vMdivJmfISQ1TRq9447dS_vSAAeFqWmcy!980261269; SS_X_JSESSIONID=m6HzTaZAIfVs5rAXvAmJVvbRMBHFZI5luACTngbYXojijX3GRZII!-1698803091; AlteonP=Ag4lC9EDXgohEJYqJY+aVw$$; _ga=GA1.2.1081176522.1494435604; _gid=GA1.2.1371971358.1494435604; _gat=1; smvr=eyJ2aXNpdHMiOjEsInZpZXdzIjoxLCJ0cyI6MTQ5NDQzNTYwNTQ0MiwibnVtYmVyT2ZSZWplY3Rpb25CdXR0b25DbGljayI6MH0=; smuuid=15bf34dabc3-8270ba3f2152-e43d3412-24248cf2-63cc066a-cfa9391c1368; s_cc=true; s_fid=664EC68923E7B1DB-1482966A3DB6A985; s_ppn=hogares%3Aconoce%20la%20energ%C3%ADa%3Atarifa%20regulada%20pvpc%3Afacturaci%C3%B3n%20por%20horas%3Aprecio%20de%20la%20electricidad%20a%20tiempo%20real%20para%20tarifas%20pvpc; s_nr=1494435620374-New; s_sq=%5B%5BB%5D%5D',
 					'Pragma'                    : 'no-cache',
-					'Cache-Control'             : 'no-cache',
-		            'Upgrade-Insecure-Requests' : '1'
+					'Cache-Control'             : 'max-age=0'
 		            }
 
-		values = { 'currentDate' : anio+'-'+mes+'-'+dia,
+		values = { 'currentDate' : date_url,
 		           'currentRate' : 'GEN',
-		           '_authkey_'   : 'B1A8BA205BB494C5588AD0117E11F4C1D8669B06D9D818A348BC6C935EFB03AC057E4EF385DF4BE09A0C8930BDE0F11E' 
+		           '_authkey_'   : '7B2E7B99C6F51180CF47AB7A923AC71F33E4D358A9D254D62850BAB7D1E65D7D34B0F9BDBAD1C23BA4D48110B058F04A' 
 		           }
 
 		data = urllib.urlencode(values)
 
-		url = 'https://www.endesaclientes.com/ss/Satellite?pagename=SiteEntry_IB_ES/LandingPrice/GetPrices&rand=19251&rand=29253'
+		url = 'https://www.endesaclientes.com/ss/Satellite?pagename=SiteEntry_IB_ES/LandingPrice/GetPrices&rand=30501&rand=30167'
 		try:
 			request  = urllib2.Request(url = url, data = data, headers = headers)
 			response = urllib2.urlopen(request)
@@ -54,10 +52,25 @@ class Precio(object):
 				regex = r"var objArray = (.*);"
 				matches = re.finditer(regex, result)
 				for matchNum, match in enumerate(matches):
-					print (match.group(1))
+					return self.getJson( json.loads( match.group(1) ), date_json )
 
 		except urllib2.HTTPError as err:
 			print "Error capturado: "
 			print err.read()
 			print err.info()
+
+	def getJson( self, price_json, date ):
+		json_return = {
+			"Fecha"   : date,
+			"Valores" : []
+		}
+
+		for val in price_json:
+			json_return['Valores'].append({
+				"Hora"   : val['Hora'],
+				"Precio" : str( (float)( val['GEN'].replace( ',', '.' ) )/1000.0 )
+			})
+
+		return json_return
+
 
