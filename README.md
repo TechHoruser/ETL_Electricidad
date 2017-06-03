@@ -2,6 +2,7 @@
 Proyecto destinado a la asignatura de TIN usando software de ETL Pentaho, el cual extraerá datos de distintas webs sobre consumo y precios de la electricidad y crearemos análisis de diversas formas sobre dichos datos.
 
 ## Bots (python)
+### Configuración Previa
 Para la generación de ficheros json de consumo y precios de la electricidad en España ejecutaremos el fichero _./src/main.py_. Previamente a la ejecución estableceremos los parámetros necesarios para la misma, creando una copia del fichero _./config/Params-default.py_ en el siguiente path _./config/Params.py_.
 
 **Comando de ayuda:**
@@ -29,3 +30,15 @@ Seguiremos los siguientes pasos:
      Puede usar el comando: `nano ./config/Params.py`
 
 En caso de que el fichero de de algún tipo de error la generacion del fichero _*.precio.json_, repetir estos pasos limpiando la caché del navegador.
+
+### Instalación Dependencias
+Para instalar las dependencias necesarias para la ejecución de los bots habrá que ejecutar previamente el siguiente comando en el directorio raiz del repositorio
+
+`./config/Install-dependencies.sh`
+
+### Ejecución de los BOTS
+Para ejecutar los bots en el directirio raiz del repositorio usar el siguiente comando:
+
+`python ./src/main.py`
+
+La terminal solicitará una fecha de inicio y fin las cuales deberá ser ingresada con el formato de _d/m/YYYY_. Y posterior mente el nombre del fichero, el cual será creado en la ruta establecida en el fichero de configuración previamente editado ( variable **tmp_directory** ) y el nombre de los ficheros será: **<NombreIntroducido>.consumo.json** y **<NombreIntroducido>.precio.json**.

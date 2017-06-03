@@ -3,7 +3,6 @@
 
 from bs4 import BeautifulSoup
 from beautifulsoupselect import select
-from flask import Flask
 from StringIO import StringIO
 import gzip
 import time
