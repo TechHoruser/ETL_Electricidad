@@ -1,2 +1,31 @@
 # ETL_Electricidad
-Proyecto destinado a la asignatura de TIN en el cual se usará como ETL Pentaho, el cual extraerá datos de distintas webs y crearemos analisis de los mismos.
+Proyecto destinado a la asignatura de TIN usando software de ETL Pentaho, el cual extraerá datos de distintas webs sobre consumo y precios de la electricidad y crearemos análisis de diversas formas sobre dichos datos.
+
+## Bots (python)
+Para la generación de ficheros json de consumo y precios de la electricidad en España ejecutaremos el fichero _./src/main.py_. Previamente a la ejecución estableceremos los parámetros necesarios para la misma, creando una copia del fichero _./config/Params-default.py_ en el siguiente path _./config/Params.py_.
+
+**Comando de ayuda:**
+
+`cp ./config/Params-default.py ./config/Params.py`
+
+A continuación estableceremos los parámetros del fichero _./config/Params.py_ como se indican en los comentarios. Para establecer las variables:
+-  auth_key
+-  rand_1
+-  rand_2
+-  cookie
+
+**Realizado en Firefox**
+
+Seguiremos los siguientes pasos:
+  1.  Accedemos a la siguiente URL: [Precios Endesa](https://www.endesaclientes.com/precio-luz-pvpc.html)
+  2.  Click derecho e _Inspeccionar Elemento_
+  3.  Accederemos a la pestaña de **_red_**
+     [Imagen Inspector](https://www.dropbox.com/s/k00hc41eixza2fj/Petici%C3%B3n%20Web%201.png?dl=0)
+  4.  Hacemos click en un día previo al de hoy esperando recibir la respuesta marcada
+     [Imagen Petición Red](https://www.dropbox.com/s/3mm6axfnqpnij9s/Petici%C3%B3n%20Web%202.png?dl=0)
+  5.  Hacemos click en _Editar y volver a enviar_
+  6.  Extraemos de aquí las variables necesarias (previamente nombradas)
+     [Imagen Variables](https://www.dropbox.com/s/qz81fky8w29hys9/Petici%C3%B3n%20Web%203.png?dl=0)
+     Puede usar el comando: `nano ./config/Params.py`
+
+En caso de que el fichero de de algún tipo de error la generacion del fichero _*.precio.json_, repetir estos pasos limpiando la caché del navegador.
