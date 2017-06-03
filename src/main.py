@@ -35,7 +35,7 @@ while (date <= end_date):
 
 	json_consumo += consum.getData( date.strftime("%Y/%m/%d") )
 
-	json_precio.append( prec.getData( date.strftime("%Y-%m-%d"), date.strftime("%d/%m/%Y") ) )
+	json_precio.append( prec.getData( date.strftime("%Y-%m-%d"), date.strftime("%d/%m/%Y"), Params.auth_key, Params.rand_1, Params.rand_2, Params.cookie ) )
 
 	date = date + timedelta(days=1)
 
